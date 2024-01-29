@@ -1,0 +1,271 @@
+units:
+  pinky_rotation: 10 # degrees rotation relative to zone rotation
+  pinky_spread: 18.5
+  
+  ring_rotation: 5
+  ring_spread: 19
+
+  middle_rotation: 3
+  middle_spread: 18.5
+
+  index_rotation: 0
+  index_spread: 18.5
+
+  rounding: 2
+  wall: 4.01
+
+  inner_rotation: 0
+  inner_spread: 18.5
+
+  choc_plate_thickness: 1.2
+  mx_plate_thickness: 1.5
+
+points:
+  mirror:
+    ref: thumb_right_home
+    distance: 60
+  rotate: 0
+  key: # each key across all zones will have these properties
+    bind: 5
+    width: 1u
+    height: 1u
+    tags:
+      1u: true
+    footprints: # These footprints will be added for each of the points
+      choc_hotswap:
+        type: MX
+        nets:
+          to: "{{key_net}}"
+          from: GND
+        params:
+          reverse: false
+          hotswap: true
+          # Don't show a model for this since 'choc' already loads the model
+          model: false
+          keycaps: false
+      choc:
+        type: MX
+        anchor:
+          rotate: 180
+        nets:
+          to: "{{key_net}}"
+          from: GND
+        params:
+          keycaps: true
+          reverse: false
+  zones:
+    matrix:
+      key:
+        tags:
+          not_thumb: true
+      rotate: -15
+      rows:
+        bottom.padding: 1u
+        home.padding: 1u
+        top.padding: 1u
+      columns:
+        outer:
+          key:
+            splay: pinky_rotation
+            #tags: outer
+          rows:
+            bottom.skip: true
+            home.key_net: P106
+            home.key.tags: outer
+            top.skip: true
+        pinky:
+          key:
+            splay: pinky_rotation - pinky_rotation
+            stagger: 0
+            spread: pinky_spread
+          rows:
+            bottom.key_net: P104
+            home.key_net: P102
+            top.skip: true
+        ring:
+          key:
+            splay: ring_rotation - pinky_rotation
+            stagger: 8
+            spread: ring_spread
+          rows:
+            bottom.key_net: P101
+            home.key_net: P103
+            top.key_net: P100
+        middle:
+          key:
+            splay: middle_rotation - ring_rotation
+            stagger: 5
+            spread: middle_spread
+          rows:
+            bottom.key_net: P022
+            home.key_net: P029
+            top.key_net: P030
+        index:
+          key:
+            splay: index_rotation - middle_rotation
+            stagger: -5
+            spread: index_spread
+          rows:
+            bottom.key_net: P031
+            home.key_net: P004
+            top.key_net: P005
+        inner:
+          key:
+            splay: inner_rotation - index_rotation
+            stagger: -5
+            spread: inner_spread
+          rows:
+            bottom.key_net: P007
+            home.key_net: P109
+            top.key_net: P012
+    thumb:
+      key:
+        tags:
+          thumb: true
+      anchor:
+        ref: matrix_index_bottom
+        shift: [ 0.75u, -1.75u]
+      columns:
+        left:
+          key:
+            splay: -10
+            stagger: -5
+            origin: [ -0.5u, -.75u ]
+            key_net: P009
+            rotate: 90
+            width: 1.5u
+        right:
+          key:
+            spread: 1.05u
+            stagger: 0.15u # Move up by 0.25cy so a 1.5cy keycap lines up with the bottom
+            splay: -15 # -25 degrees cumulative
+            origin: [-1.1u, -0.75u] # Pivot at the lower left corner of a 1.5u choc key
+            height: 1u
+            width: 1.5u
+            rotate: 90
+            tags:
+              15u: true
+              1u: false
+            key_net: P010
+      rows:
+        home:
+          padding: 0
+
+outlines:
+  _switch_holes:
+    - what: rectangle
+      where: true
+      asym: left
+      size: 13.85
+
+  _keycaps:
+    - what: rectangle
+      where: not_thumb
+      asym: both
+      size: 18
+    - what: rectangle
+      where: thumb
+      size: [1.5u,1u]
+
+  _swd_board:
+    - what: rectangle
+      adjust:
+        ref: mirror_matrix_pinky_bottom
+        shift: [0, 41]
+      size: [14, 18]
+
+  _swd_cutout:
+    - what: rectangle
+      adjust:
+        ref: mirror_matrix_pinky_bottom
+        shift: [0, 41]
+      size: [14, 6]
+
+  _swd_space:
+    - what: rectangle
+      adjust:
+        ref: mirror_matrix_pinky_bottom
+        shift: [0, 41]
+      size: [24, 22]
+      corner: rounding
+
+  _nice_space:
+    - what: rectangle
+      adjust: 
+        ref: matrix_outer_home
+        shift: [16, 21]
+      size: [36,24]
+      corner: rounding
+
+  _nice_headers:
+    - what: rectangle
+      adjust:
+        ref: matrix_outer_home
+        shift: [11, 30]
+      size: [30.5, 3]
+    - what: rectangle
+      adjust:
+        ref: matrix_outer_home
+        shift: [11, 15]
+      size: [30.5, 3]
+
+  _perimeter:
+    - what: rectangle
+      where: not_thumb
+      asym: both
+      size: 14 + (6*2)
+      #corner: rounding
+    - what: rectangle
+      where: thumb
+      asym: both
+      size: [2u, 1.5u]
+      #corner: rounding
+    - _nice_space
+    - _swd_space
+
+
+  plate:
+    - what: outline
+      name: _perimeter
+      #expand: wall
+      operation: stack
+      #fillet: 3
+    - what: outline
+      name: _switch_holes
+      operation: stack
+    - what: outline
+      name: _nice_headers
+      operation: stack
+    - what: outline
+      name: _swd_cutout
+      operation: stack
+
+  fit:
+    - what: outline
+      name: _perimeter
+      expand: wall
+      operation: stack
+    - what: outline
+      name: _perimeter
+      operation: stack
+    - what: outline
+      name: _keycaps
+      operation: stack
+    - what: outline
+      name: _switch_holes
+      operation: stack
+    - what: outline
+      name: _nice_headers
+      operation: stack
+    - what: outline
+      name: _swd_board
+      operation: stack
+    - what: outline
+      name: _swd_cutout
+      operation: stack
+
+  bottom:
+    - what: outline
+      name: _perimeter
+      expand: wall
+      operation: stack
