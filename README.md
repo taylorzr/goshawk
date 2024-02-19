@@ -23,22 +23,8 @@ split inspired by [schrodinger](https://www.reddit.com/r/MechanicalKeyboards/com
 
 ## build
 
-i might build another and document it, but until then
+see [build.md](./build.md)
 
-* print case
-* insert switches
-* wire matrix
-* solder idc cable board to nice-nano
-* solder wires to nice-nano, and test flash nice-nano
-* solder wires to idc board for right side
-* solder wires to switch
-* slide battery into case
-* insert nice-nano into case
-* solder battery negative to nice-nano
-* tape down nice-nano
-* solder wires to rows and columns
-* solder battery positive to one switch wire
-* TODO: https://www.printables.com/model/284057-hot-swap-socket-holders
 
 ## pinout
 
