@@ -11,8 +11,9 @@ units:
   index_rotation: 0
   index_spread: 18.5
 
-  rounding: 2
-  wall: 4.01
+  rounding: 0
+  wall: 3
+  hole_r: 1.25
 
   inner_rotation: 0
   inner_spread: 18.5
@@ -187,27 +188,57 @@ outlines:
         ref: mirror_matrix_pinky_bottom
         shift: [0, 41]
       size: [24, 22]
-      corner: rounding
+      #corner: rounding
 
   _nice_space:
     - what: rectangle
       adjust: 
         ref: matrix_outer_home
-        shift: [16, 21]
+        shift: [13.5, 21]
       size: [36,24]
-      corner: rounding
+      #corner: rounding
 
   _nice_headers:
     - what: rectangle
       adjust:
         ref: matrix_outer_home
-        shift: [11, 30]
-      size: [30.5, 3]
+        shift: [10, 31.5]
+      size: [31, 3]
     - what: rectangle
       adjust:
         ref: matrix_outer_home
-        shift: [11, 15]
-      size: [30.5, 3]
+        shift: [10, 16.5]
+      size: [31, 3]
+
+  _hotswap:
+    - what: rectangle
+      where: true
+      asym: source
+      size: [16, 10]
+      adjust:
+        shift: [2, 5]
+
+  _holes:
+    - what: circle
+      radius: hole_r
+      adjust:
+        ref: matrix_pinky_home
+        shift: [10, 4.5]
+    - what: circle
+      radius: hole_r
+      adjust:
+        ref: matrix_middle_home
+        shift: [9.75, -8.5]
+    - what: circle
+      radius: hole_r
+      adjust:
+        ref: mirror_matrix_middle_home
+        shift: [9.75, -4.5]
+    - what: circle
+      radius: hole_r
+      adjust:
+        ref: mirror_matrix_pinky_home
+        shift: [11, 14]
 
   _perimeter:
     - what: rectangle
@@ -239,6 +270,9 @@ outlines:
     - what: outline
       name: _swd_cutout
       operation: stack
+    - what: outline
+      name: _holes
+      operation: stack
 
   fit:
     - what: outline
@@ -248,9 +282,9 @@ outlines:
     - what: outline
       name: _perimeter
       operation: stack
-    - what: outline
-      name: _keycaps
-      operation: stack
+    #- what: outline
+    #  name: _keycaps
+    #  operation: stack
     - what: outline
       name: _switch_holes
       operation: stack
@@ -262,6 +296,12 @@ outlines:
       operation: stack
     - what: outline
       name: _swd_cutout
+      operation: stack
+    - what: outline
+      name: _holes
+      operation: stack
+    - what: outline
+      name: _hotswap
       operation: stack
 
   bottom:
